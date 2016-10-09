@@ -12,13 +12,14 @@ RUN apt-get update -y \
     && apt-get upgrade -y \
     && apt-get install -y curl jq haproxy zookeeper postgresql-${PGVERSION} python-psycopg2 python-yaml \
         python-requests python-six python-click python-dateutil python-tzlocal python-urllib3 \
-        python-dnspython python-pip python-setuptools python-kazoo python-prettytable python-wheel python \
+        python-dnspython python-pip python-setuptools python-kazoo python-prettytable python-wheel python iproute2 \
     && pip install python-etcd==0.4.3 python-consul==0.6.0 --upgrade \
     && apt-get remove -y python-pip python-setuptools \
     && apt-get autoremove -y \
         # Clean up
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/* /root/.cache
+
 
 ENV ETCDVERSION 3.0.8
 RUN curl -L https://github.com/coreos/etcd/releases/download/v${ETCDVERSION}/etcd-v${ETCDVERSION}-linux-amd64.tar.gz \
@@ -37,6 +38,7 @@ RUN ln -s /patronictl.py /usr/local/bin/patronictl
 RUN mkdir /data/ && touch /pgpass /patroni.yml \
     && chown postgres:postgres -R /patroni/ /data/ /pgpass /patroni.yml /etc/haproxy /var/run/ /var/lib/ /var/log/ \
     && echo 1 > /etc/zookeeper/conf/myid
+
 
 EXPOSE 2379 5432 8008
 

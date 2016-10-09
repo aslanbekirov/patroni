@@ -20,7 +20,22 @@ Examples:
 __EOF__
 }
 
-DOCKER_IP=$(hostname --ip-address)
+
+#DOCKER_IP=$(hostname --ip-address)
+DOCKER_IP=$(networkctl status | awk '/Address/ { print $2 }')
+
+while  [ x$DOCKER_IP == 'x' ]; do
+        echo 'Waiting for calico networking'
+        DOCKER_IP=$(script  -c "networkctl status | awk '/Address/ { print $2 }'" /dev/null |  awk '/Address/ { print $2 }')
+        echo $DOCKER_IP
+        sleep 5
+done
+
+
+
+echo "DOCKER OBTAINED IP"
+echo $DOCKER_IP
+
 PATRONI_SCOPE=${PATRONI_SCOPE:-batman}
 ETCD_ARGS="--data-dir /tmp/etcd.data -advertise-client-urls=http://${DOCKER_IP}:2379 -listen-client-urls=http://0.0.0.0:2379 -listen-peer-urls=http://0.0.0.0:2380"
 
