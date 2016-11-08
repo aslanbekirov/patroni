@@ -41,8 +41,9 @@ while getopts "$optspec" optchar; do
         -)
             case "${OPTARG}" in
                 confd)
-                    haproxy -f /etc/haproxy/haproxy.cfg -p /var/run/haproxy.pid -D
+                    mkdir -p /run/haproxy 
                     CONFD="confd -prefix=${PATRONI_NAMESPACE:-/service}/$PATRONI_SCOPE -interval=10 -backend"
+                    haproxy -f /etc/haproxy/haproxy.cfg -p /var/run/haproxy.pid -D
                     if [ ! -z ${PATRONI_ZOOKEEPER_HOSTS} ]; then
                         while ! /usr/share/zookeeper/bin/zkCli.sh -server ${PATRONI_ZOOKEEPER_HOSTS} ls /; do
                             sleep 1
