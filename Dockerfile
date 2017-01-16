@@ -41,4 +41,3 @@ RUN mkdir /data/ && touch /pgpass /patroni.yml \
 EXPOSE 2379 5432 8008
 
 ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
-USER postgres

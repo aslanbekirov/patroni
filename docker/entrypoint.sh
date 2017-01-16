@@ -116,12 +116,13 @@ bootstrap:
 __EOF__
 
 #change owner of /data directory postgres:postgres after persistent volume mounted
-chown -R postgres:postgres /data 
+echo "Changing owner of /data"
+chown -R postgres:postgres /data/ 
 
 mkdir -p "$HOME/.config/patroni"
 [ -h "$HOME/.config/patroni/patronictl.yaml" ] || ln -s /patroni.yml "$HOME/.config/patroni/patronictl.yaml"
 
-[ -z $CHEAT ] && exec python /patroni.py /patroni.yml
+[ -z $CHEAT ] && su postgres -c "exec python /patroni.py /patroni.yml"
 
 while true; do
     sleep 60
