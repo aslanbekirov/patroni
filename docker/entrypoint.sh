@@ -115,6 +115,9 @@ bootstrap:
   - host replication replicator ${DOCKER_IP}/16    md5
 __EOF__
 
+#change owner of /data directory postgres:postgres after persistent volume mounted
+chown -R postgres:postgres /data 
+
 mkdir -p "$HOME/.config/patroni"
 [ -h "$HOME/.config/patroni/patronictl.yaml" ] || ln -s /patroni.yml "$HOME/.config/patroni/patronictl.yaml"
 
