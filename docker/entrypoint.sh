@@ -117,7 +117,8 @@ __EOF__
 
 
 #change owner of /data directory postgres:postgres after persistent volume mounted
-echo "Changing owner of /data"
+echo "Changing owner of /data and env" 
+env TERM=xterm
 su - root -c 'chown -R postgres:postgres /data/'
 
 mkdir -p "$HOME/.config/patroni"
